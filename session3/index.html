@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Table and Form</title>
+</head>
+<body>
+    
+    <header>
+        <h1>HTML Table and Form</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>HTML Entities</h2>
+            <p>Reserved character in HTML (e.g &lt; or &gt; characters that can mix up with HTML code.)</p>
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Entity</th>
+                        <th colspan="2">Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>&lt;</td>
+                        <td>lt</td>
+                        <td>Less Than</td>
+                    </tr>
+
+                    <tr>
+                        <td>&gt;</td>
+                        <td>gt</td>
+                        <td>Greater Than</td>
+                    </tr>
+
+                    <tr>
+                        <td>&quot;</td>
+                        <td>quot</td>
+                        <td>Double Quotation Mark</td>
+                    </tr>
+                </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th colspan="3">List of HTML Entities</th>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </section>
+
+        <section>
+            <h2>HTML Form</h2>
+            <p>Input elements that make up a form.</p>
+
+            <form action="https://www.google.com/">
+                <label for="full_name">Full Name</label><br>
+                <input type="text" id="full_name" name="full_name" required autocomplete><br>
+                
+                <label for="dob">Date of Birth</label><br>
+                <input type="date" id="dob" name="dob" required autocomplete><br>
+
+                <label for="age">Age</label><br>
+                <input type="number" id="age" name="age"  required autocomplete><br>
+
+                <label for="gender">Gender</label><br>
+
+                <select name="gender" id="gender">
+                    <option value="">--- Select ---</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Others</option>
+                </select><br>
+
+                <label for="notes">Notes</label><br>
+                <textarea name="notes" id="notes" rows="5"></textarea><br>
+
+                <button type="submit">Submit</button><br>
+                <button type="reset">Reset</button>
+
+            </form>
+        </section>
+    </main>
+    
+</body>
+</html>
