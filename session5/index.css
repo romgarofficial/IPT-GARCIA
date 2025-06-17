@@ -1,0 +1,100 @@
+/* UNIVERSAL SELECTOR */
+
+/* 
+SYNTAX:
+
+selector{
+    property: value;
+}
+
+*/
+
+*{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+}
+
+body{
+    background-color: skyblue;
+}
+
+nav{
+    background-color: white;
+    padding: 20px;
+    margin: 20px;
+}
+
+div{
+    float: right;
+    
+}
+
+/* Element or Type Selector */
+
+h1{
+    color: yellow !important;
+    text-align: center;
+    font-size: 2rem;
+}
+
+/* LANDING SECTION */
+
+section{
+    height: 100vh;
+    text-align: center;
+}
+
+h2{
+    font-size: 1.5rem;
+}
+
+/* ID Selector */
+
+#ua-motto{
+    letter-spacing: 8px;
+}
+
+h3{
+    letter-spacing: 25px;
+}
+
+/* Class Selector */
+
+.modules{
+    letter-spacing: 5px;
+}
+
+/* Adjacent  Sibling Selector*/
+/* Selector + Selector */
+
+h3 + img{
+    height: 300px;
+    width: 300px;
+    border-radius: 80px;
+}
+
+ol{
+    list-style-type: none;
+}
+
+.offering-item{
+    text-transform: uppercase;
+}
+
+/* Descendant Selector */
+/* selector selector */
+
+#bootcamp-learning-list li{
+    color: green;
+}
+
+/* General Sibling Select */
+/* selector ~ selector */
+
+h2 ~ a{
+    text-decoration: none;
+}
+
+html{
+    scroll-behavior: smooth;
+}
