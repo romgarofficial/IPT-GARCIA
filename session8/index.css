@@ -1,1 +1,77 @@
 /* CSS Common Positioning Properties */
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.img-float{
+    width: 250px;
+    height: 250px;
+    float: right;
+}
+
+.parent-element{
+    background-color: skyblue;
+    padding: 50px 10px;
+    position: relative;
+    height: 800vh;
+}
+
+.child-one{
+    background-color: gray;
+    padding: 10px;
+}
+
+.child-two{
+    background-color: yellow;
+    padding: 10px;
+    position: sticky;
+    top: 10px;
+    
+}
+
+.child-three{
+    background-color: gray;
+    padding: 10px;
+}
+
+html{
+    height: 800vh;
+}
+
+.container{
+    position: relative;
+}
+
+.black-box{
+    position: relative;
+    background-color: black;
+    height: 100px;
+    width: 300px;
+    padding: 20px;
+    border: 2px solid yellow;
+    color: white;
+    z-index: 3;
+}
+
+.gray-box{
+    position: absolute;
+    background-color: gray;
+    height: 80px;
+    width: 70%;
+    top: 50px;
+    left: 50px;
+    z-index: 1;
+}
+
+.green-box{
+    position: absolute;
+    background-color: lightgreen;
+    width: 35%;
+    height: 100px;
+    left: 270px;
+    top: -15px;
+    z-index: 2;
+}
