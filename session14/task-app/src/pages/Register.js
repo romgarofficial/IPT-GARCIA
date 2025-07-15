@@ -1,9 +1,22 @@
 import {  useEffect, useState } from "react"
 import { Container, Form, Button } from "react-bootstrap"
 import Swal from "sweetalert2";
+import { useAuth } from "../AuthContext";
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function Register() {
+    const {user} = useAuth();
+    const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "UTask - REGISTER"
+
+     if(user){
+      navigate("/tasks")
+    }
+  }, [user, navigate])
 
     let [fname, setFname] =useState("");
     let [mname, setMname] =useState("");
@@ -47,7 +60,7 @@ export default function Register() {
     function register(e){
         e.preventDefault();
 
-        fetch("http://localhost:3000/users/register", {
+        fetch("http://localhost:4000/users/register", {
             method: "POST",
             headers: {"Content-Type" : "application/json"},
             body: JSON.stringify({fname, mname, lname, email, pass})
