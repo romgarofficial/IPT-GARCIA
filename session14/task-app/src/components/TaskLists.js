@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../AuthContext'
-import { Badge, Card, Col, Container, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { PlusCircle, Textarea } from 'react-bootstrap-icons';
+import Swal from 'sweetalert2';
 
 
 
@@ -10,6 +12,12 @@ export default function TaskLists() {
     const {user} = useAuth();
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState("");
+    const [newTask, setNewTask] = useState({taskName: "", taskDescription: ""});
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     function formatDate(dateString) {
     if (!dateString) return "-";
@@ -46,6 +54,43 @@ export default function TaskLists() {
         })
     }
 
+    const AddTask = (e) => {
+        console.log("Addtask");
+        e.preventDefault();
+
+        if(!user) return;
+
+        fetch("http://localhost:4000/tasks/create", {
+            method: "POST",
+            headers: {"Content-Type" : "application/json"},
+            body: JSON.stringify({
+                ...newTask,
+                isActive: 1,
+                taskCreated: new Date(),
+                user_id: user.user_id
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.code === 1){
+                Swal.fire({
+                    icon: "success",
+                    title: "Task Added!",
+                    text: data.details
+                })
+                fetchTasks();
+                handleClose();
+                setNewTask({taskName: "", taskDescription: ""});
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops!",
+                    text: data.details
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         fetchTasks();
     }, [user])
@@ -54,11 +99,63 @@ export default function TaskLists() {
 
   return (
    <>
-    <Row xs={1} md={2} lg={3} className='my-5'>
+   <Container fluid className='d-flex justify-content-end align-items-center m-2'>
+        <Button className='btn-warning p-3 px-5 d-flex justify-content-center align-items-center rounded-pill' onClick={handleShow}>
+        <PlusCircle className="me-2" size={25}/>
+        Add Task
+        </Button>
+   </Container>
+
+   {/* MODAL FOR ADD TASK */}
+   <Modal show={show} onHide={handleClose} centered size='lg'>
+        <Modal.Header closeButton className='bg-warning p-4'>
+          <Modal.Title>Add a new task?</Modal.Title>
+        </Modal.Header>
+
+        <Form className='p-1 p-lg-3' onSubmit={AddTask}>
+            <Modal.Body className='p-3'>
+                
+                    {/* Task Name Input Field */}
+                    <Form.Group className="mb-3">
+                        <Form.Control 
+                            type="text" 
+                            placeholder="Task Name" 
+                            required
+                            onChange={e => setNewTask({...newTask, taskName: e.target.value})}
+                            value={newTask.taskName}
+                        />
+                    </Form.Group>
+
+                    {/* Task Description Input Field */}
+                    <Form.Group className="mb-3">
+                        <Form.Control 
+                            type="text" 
+                            placeholder="Task Description" 
+                            required 
+                            as="textarea" 
+                            rows={5}
+                            onChange={e => setNewTask({...newTask, taskDescription: e.target.value})}
+                            value={newTask.taskDescription}
+                        />
+                    </Form.Group>
+                
+            </Modal.Body>
+
+            <Modal.Footer>
+            <Button type='submit' variant="success" className='px-5 rounded-pill p-2'>
+                Add
+            </Button>
+            </Modal.Footer>
+        </Form>
+    </Modal>
+    {/* MODAL FOR ADD TASK */}
+   
+
+    <Row xs={1} md={2} lg={3} className='my-3'>
         {
             tasks.map(task => (
-                <Col key={task.task_id}>
-                    <Card className='h-100 shadow border rounded-4 p-1 p-lg-3 my-5'>
+                <Col key={task.task_id} className='my-2'>
+                    <Card className='h-100 shadow border rounded-4 p-1 p-lg-3'>
                         <Card.Body>
                             <Card.Title>
                                 <h3 className='fw-bold text-primary-emphasis my-3'>{task.taskName}</h3>
