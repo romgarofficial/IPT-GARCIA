@@ -54,7 +54,7 @@ export default function TaskLists() {
     const fetchTasks = () => {
         if(!user) return;
 
-        fetch(`http://localhost:4000/tasks/all/${user.user_id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/tasks/all/${user.user_id}`)
         .then(res => res.json())
         .then(data => {
             if(data.code === 1 && Array.isArray(data.details)){
@@ -76,7 +76,7 @@ export default function TaskLists() {
 
         if(!user) return;
 
-        fetch("http://localhost:4000/tasks/create", {
+        fetch(`${process.env.REACT_APP_API_URL}/tasks/create`, {
             method: "POST",
             headers: {"Content-Type" : "application/json"},
             body: JSON.stringify({
@@ -110,7 +110,7 @@ export default function TaskLists() {
     const deleteTask = (task_id) => {
         if(!user) return;
 
-        fetch(`http://localhost:4000/tasks/delete/${user.user_id}/${task_id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/tasks/delete/${user.user_id}/${task_id}`, {
             method: "DELETE"
         })
         .then(res => res.json())
@@ -138,7 +138,7 @@ export default function TaskLists() {
     const taskCompleted = (task_id) => {
         if(!user) return;
 
-        fetch(`http://localhost:4000/tasks/complete/${user.user_id}/${task_id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/tasks/complete/${user.user_id}/${task_id}`, {
             method: "PUT"
         })
         .then(res => res.json())

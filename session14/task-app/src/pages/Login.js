@@ -26,7 +26,7 @@ export default function Login() {
   function loginUser(e){
     e.preventDefault();
 
-    fetch("http://localhost:4000/users/login", {
+    fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
       method: "POST",
       headers: {"Content-Type" : "application/json"},
       body: JSON.stringify({email, pass})
