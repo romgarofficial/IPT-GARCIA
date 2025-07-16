@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../AuthContext'
-import { Badge, Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
-import { PlusCircle, Textarea } from 'react-bootstrap-icons';
+import { Badge, Button, ButtonGroup, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { CheckCircleFill, PencilSquare, PlusCircle, Textarea, TrashFill } from 'react-bootstrap-icons';
 import Swal from 'sweetalert2';
+
+
 
 
 
@@ -13,11 +15,25 @@ export default function TaskLists() {
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState("");
     const [newTask, setNewTask] = useState({taskName: "", taskDescription: ""});
+    const [selectedTask, setSelectedTask] = useState({task_id: "", taskName: ""});
 
+    console.log(selectedTask)
+
+
+    // Modal useState for Adding Task
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    // Modal for Delete Confirmation
+    const [showDelete, setShowDelete] = useState(false);
+    const handleCloseDelete = () => setShowDelete(false);
+    const handleShowDelete = () => setShowDelete(true);
+
+    // Modal for Task Completion Confirmation
+    const [showCompleted, setShowCompleted] = useState(false);
+    const handleCloseCompleted = () => setShowCompleted(false);
+    const handleShowCompleted = () => setShowCompleted(true);
 
     function formatDate(dateString) {
     if (!dateString) return "-";
@@ -91,11 +107,64 @@ export default function TaskLists() {
         })
     }
 
+    const deleteTask = (task_id) => {
+        if(!user) return;
+
+        fetch(`http://localhost:4000/tasks/delete/${user.user_id}/${task_id}`, {
+            method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(task_id)
+            if(data.code === 1){
+                Swal.fire({
+                    icon: "success",
+                    title: "Task Deleted!",
+                    text: data.details
+                })
+
+                fetchTasks();
+                handleCloseDelete();
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Task Cannot Be Deleted!",
+                    text: data.details
+                })
+            }
+        })
+    }
+
+    const taskCompleted = (task_id) => {
+        if(!user) return;
+
+        fetch(`http://localhost:4000/tasks/complete/${user.user_id}/${task_id}`, {
+            method: "PUT"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.code === 1){
+                Swal.fire({
+                    icon: "success",
+                    title: "Task Completed!",
+                    text: data.details
+                })
+                fetchTasks();
+                handleCloseCompleted();
+            }else{
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops!",
+                    text: data.details
+                })
+            }
+        })
+    }
+
     useEffect(() => {
         fetchTasks();
     }, [user])
 
-    console.log(tasks);
 
   return (
    <>
@@ -154,6 +223,7 @@ export default function TaskLists() {
     <Row xs={1} md={2} lg={3} className='my-3'>
         {
             tasks.map(task => (
+                <>
                 <Col key={task.task_id} className='my-2'>
                     <Card className='h-100 shadow border rounded-4 p-1 p-lg-3'>
                         <Card.Body>
@@ -173,9 +243,87 @@ export default function TaskLists() {
                         <Card.Footer>
                             <p className='fw-bold'>Added: {formatDate(task.taskCreated)}</p>
                             <p className='fw-bold'>Completed: {formatDate(task.taskCompleted)}</p>
+
+                            <ButtonGroup size='lg'>
+                                <Button variant="primary"><PencilSquare/></Button>
+                                
+                                <Button 
+                                variant="danger" 
+                                onClick={() => {
+                                    handleShowDelete();
+                                    setSelectedTask(task ? task : null);
+                                    }}>
+                                <TrashFill/>
+                                </Button>
+                                
+                                {
+                                    task.isActive ?
+                                    <Button variant="success" onClick={() => {
+                                    handleShowCompleted();
+                                    setSelectedTask(task ? task : null);
+                                    }}>
+                                    <CheckCircleFill/>
+                                    </Button>
+                                    :
+                                    <Button className='d-none' variant="success" onClick={() => {
+                                    handleShowCompleted();
+                                    setSelectedTask(task ? task : null);
+                                    }}>
+                                    <CheckCircleFill/>
+                                    </Button>
+                                }
+                                
+                            </ButtonGroup>
                         </Card.Footer>
                     </Card>
                 </Col>
+
+                {/* MODAL FOR DELETE CONFIRMATION */}
+                <Modal show={showDelete} onHide={handleCloseDelete} centered size='lg'>
+                <Modal.Header closeButton className='bg-warning p-4'>
+                <Modal.Title>Please Confirm!</Modal.Title>
+                </Modal.Header>
+
+                    <Modal.Body className='p-3 text-center'>
+                        <h4 className='fw-bold'>
+                        Are you sure you want to delete <span className='text-primary'>{selectedTask.taskName.toUpperCase()}</span>?
+                        </h4>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button type='submit' variant="secondary" className='px-5 rounded-pill p-2' onClick={handleCloseDelete}>
+                            No
+                        </Button>
+                        <Button type='submit' variant="danger" className='px-5 rounded-pill p-2' onClick={() => deleteTask(selectedTask.task_id)}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+            </Modal>
+            {/* MODAL FOR DELETE CONFIRMATION */}
+
+            {/* MODAL FOR TASK COMPLETION */}
+            <Modal show={showCompleted} onHide={handleCloseCompleted} centered size='lg'>
+                <Modal.Header closeButton className='bg-warning p-4'>
+                <Modal.Title>Mark as done?</Modal.Title>
+                </Modal.Header>
+
+                    <Modal.Body className='p-3 text-center'>
+                        <h4 className='fw-bold'>
+                        Are you sure you want to mark <span className='text-primary'>{selectedTask.taskName.toUpperCase()}</span> as done?
+                        </h4>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button type='submit' variant="secondary" className='px-5 rounded-pill p-2' onClick={handleCloseCompleted}>
+                            No
+                        </Button>
+                        <Button type='submit' variant="danger" className='px-5 rounded-pill p-2' onClick={() => taskCompleted(selectedTask.task_id)}>
+                            Yes
+                        </Button>
+                    </Modal.Footer>
+            </Modal>
+            {/* MODAL FOR TASK COMPLETION */}
+                </>
             ))
         }
     </Row>
