@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default function Home() {    
+
+export default function Home() {   
+    useEffect(() => {
+        document.title = "Welcome to UTask"
+    }, [])
+    
   return (
     <div
       className="min-vh-100 d-flex align-items-center justify-content-center container-fluid p-0 m-0"
