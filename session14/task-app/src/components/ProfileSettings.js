@@ -19,7 +19,7 @@ export default function ProfileSettings() {
     // Fetch user profile info on mount
     useEffect(() => {
         if (user?.user_id) {
-            fetch(`http://localhost:4000/users/${user.user_id}`)
+            fetch(`${process.env.REACT_APP_API_URL}/${user.user_id}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.code === 1) {
@@ -38,7 +38,7 @@ export default function ProfileSettings() {
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        fetch(`http://localhost:4000/users/update/${user.user_id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/update/${user.user_id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ fname, mname, lname, email })

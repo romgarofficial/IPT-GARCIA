@@ -71,7 +71,6 @@ export default function TaskLists() {
     }
 
     const AddTask = (e) => {
-        console.log("Addtask");
         e.preventDefault();
 
         if(!user) return;
