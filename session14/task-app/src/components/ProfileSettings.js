@@ -19,7 +19,7 @@ export default function ProfileSettings() {
     // Fetch user profile info on mount
     useEffect(() => {
         if (user?.user_id) {
-            fetch(`${process.env.REACT_APP_API_URL}/${user.user_id}`)
+            fetch(`${process.env.REACT_APP_API_URL}/users/${user.user_id}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.code === 1) {
