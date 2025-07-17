@@ -43,7 +43,7 @@ export default function PasswordSettings() {
             });
             return;
         }
-        fetch(`${process.env.REACT_APP_API_URL}/${user.user_id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/update-password/${user.user_id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ oldPassword, newPassword })
