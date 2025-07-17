@@ -60,6 +60,15 @@ export default function Register() {
     function register(e){
         e.preventDefault();
 
+        if(pass !== confirmPass){
+            Swal.fire({
+                    title: "Oops!",
+                    text: "Password do not match",
+                    icon: "warning"
+                })
+            return;
+        }
+
         fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
             method: "POST",
             headers: {"Content-Type" : "application/json"},

@@ -8,6 +8,10 @@ import Register from './pages/Register';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Tasks from './pages/Tasks';
 import { Container } from 'react-bootstrap';
+import Profile from './pages/Profile';
+import Home from './pages/Home';
+
+
 
 
 
@@ -19,11 +23,13 @@ function App() {
     <AuthProvider>
     <BrowserRouter>
       <AppNavbar/>
-      <Container className=' d-flex flex-column align-items-center justify-content-center' fluid>
+      <Container className=' d-flex flex-column align-items-center justify-content-center p-0 m-0' fluid>
       <Routes>
+        <Route path='/' element={<Home/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/tasks' element={<Tasks/>}/>
+        <Route path='/profile' element={<Profile/>}/>
         <Route path='*' element={<Error/>}/>
       </Routes>
       </Container>
